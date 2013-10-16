@@ -25,6 +25,12 @@
 
 #include "onigiri.h"
 
+/** Display help for syntax usage in specific opertion.
+ * @param opt 	operation code requested
+ * @param name	basename (argv[0])
+ */
+static void optarg_usage(int opt, const char * const name) { /* blank */ };
+
 static void optargs_parser(int argc, char **argv) {
 	int aflag = 0;
 	int bflag = 0;
@@ -33,16 +39,19 @@ static void optargs_parser(int argc, char **argv) {
 	int c;
 
 	opterr = 0;
-	
-	/* Start of a loop which scopes throught aruments until getopt
+
+	/** Start of a loop which scopes throught aruments until getopt
 	 * returns -1, indicating no more options are present. */
-	while ((c = getopt(argc, argv, "abc:")) != -1) {
+	while ((c = getopt(argc, argv, "abhc:")) != -1) {
 		switch (c) {
 			case 'a':
 				aflag = 1;
 				break;
 			case 'b':
 				bflag = 1;
+				break;
+			case 'h':
+				optarg_usage(op,argv[0]);
 				break;
 			case 'c':
 				cvalue = optarg;
@@ -70,8 +79,6 @@ static void optargs_parser(int argc, char **argv) {
 	}
 }
 
-static void arg_qsort(void) {
-}
 
 int main (int argc, char **argv) {
 	optargs_parser(int argc, char **argv);
