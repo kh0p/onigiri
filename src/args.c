@@ -24,10 +24,27 @@
 #include <stdlib.h>
 #include <string.h>
 
+/** Basic assumptions
+ * This arg parser actually divide arguments into two groups:
+ *  onelet (one letter) args
+ *  mltlet (multi-letter/word-like) args
+ * by structures.
+ */
+
 struct onelet_args {
     char *args;
     int length;
 };
+
+struct mltlet_args {
+    char *args;
+    int length;
+}
+
+/** onelet args functions
+ * This is part of of code with functions only for one letter
+ * arguments to parse.
+ */
 
 struct onelet_args *olargs_create (char *args, int length)
 {
@@ -48,6 +65,34 @@ void olargs_destroy (struct onelet_args *list)
     free(list);
 }
 
+/** mltlet args functions
+ * This is part of of code with functions only for word-like
+ * arguments to parse.
+ */
+
+struct mltlet_args *mlargs_create (char *args, int length)
+{
+    struct mltlet_args *list = malloc(sizeof(struct mltlet_args));
+    assert(list != NULL);
+
+    list->args = args;
+    list->length = length;
+
+    return list;
+}
+
+void mlargs_destroy (struct mltlet_args *list)
+{
+    assert(list != NULL);
+
+    free(list->args);
+    free(list);
+}
+
+/** Functions for parser
+ * Simple functions to operate with parser.
+ */
+
 int length_ofarg (char *arg)
 {
     length = sizeof(arg) / sizeof(char);
@@ -55,6 +100,11 @@ int length_ofarg (char *arg)
     return length;
 }
 
+/*********************************************************************/
+
+/** Main parser function
+ * Here we run everything up.
+ */
 void Parse_args(int argc, const char *argv[])
 {
     int i, j = 0;
@@ -75,7 +125,7 @@ void Parse_args(int argc, const char *argv[])
         if (argv[i][0] == '-' && argv[i][1] == '-') {
             int length = length_ofarg(argv[i]) - 2;
             for (j = 2; j < length; j++) {
-                struct onelet_args *onelet_only (
+                struct mltlet_args *mltlet_only (
                         argv[i], length)
             }
         }
